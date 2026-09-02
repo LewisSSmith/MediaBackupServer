@@ -9,7 +9,7 @@ import media_manager
 from endpoints.models import Message
 from auth import get_current_user
 from database import get_db, get_path_by_id, get_view_data_by_id, get_basename_by_id, get_file_data, \
-    get_file_data_single, User
+    get_file_data_single, get_locations, User
 
 
 router = APIRouter(
@@ -97,6 +97,6 @@ async def file_request(db: AsyncSession = Depends(get_db), current_user: User = 
 
 
 @router.get("/locations")
-async def get_locations(db: AsyncSession = Depends(get_db), current_user: User = Depends(get_current_user)):
+async def locations(db: AsyncSession = Depends(get_db), current_user: User = Depends(get_current_user)):
     return await get_locations(db, current_user.id)
 
