@@ -4,6 +4,8 @@
 
 The backend is responsible for storing all media files, user accounts and acting as an API for clients.
 
+This repository is part of the [Media Backup Project](https://github.com/LewisSSmith/MediaBackup)
+
 ## Setup (Windows)
 
 Note: Ensure to restart computer if you encounter an issue during setup
