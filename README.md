@@ -45,7 +45,16 @@ Note: Ensure to restart computer if you encounter an issue during setup
 | location | geography |
 | date_last_modified | timestamp with time zone |
 
-7. Return to project directory and rename .env.example to .env and set password in .env to your PostgreSQL password
+7. Create table called 'users' with the following columns:
+
+| Name | Data Type | Not NULL? | Primary Key? |
+|------|-----------|-----------|--------------|
+| id | uuid | Y | Y |
+| username | text | Y |
+| email | text | Y |
+| password_hash | text | Y |
+
+8. Return to project directory and rename .env.example to .env and set password in .env to your PostgreSQL password
 
 ### 3. Install ExifTool
 
