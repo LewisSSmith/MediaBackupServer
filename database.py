@@ -59,10 +59,9 @@ class Media(Base):
     magic_type: Mapped[str] = mapped_column(Text)
     size: Mapped[int] = mapped_column(Integer)
     date_uploaded: Mapped[datetime] = mapped_column(DateTime(timezone=True))
-    #date_created: Mapped[datetime] = mapped_column(DateTime(timezone=True))
-    #date_last_modified: Mapped[datetime] = mapped_column(DateTime(timezone=True))
-    file_metadata: Mapped[dict] = mapped_column(JSON)
     date_created: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    date_last_modified: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    file_metadata: Mapped[dict] = mapped_column(JSON)
     naturally_viewable: Mapped[bool] = mapped_column(Boolean)
     viewable_name: Mapped[str] = mapped_column(Text)
     location: Mapped[WKBElement] = mapped_column(Geography(geometry_type="POINT", srid=4326))
@@ -141,7 +140,9 @@ async def get_file_data(db: AsyncSession, user_id: uuid.UUID, limit : int, sort_
     if sort_by == "uploaded":
         order = Media.date_uploaded
     elif sort_by == "created":
-        order = Media.date_created.nulls_last()
+        order = Media.date_created
+    elif sort_by == "last_modified":
+        order = Media.date_last_modified
     elif sort_by == "size":
         order = Media.size
     else:
@@ -161,6 +162,7 @@ async def get_file_data(db: AsyncSession, user_id: uuid.UUID, limit : int, sort_
         Media.date_uploaded,
         Media.file_metadata,
         Media.date_created,
+        Media.date_last_modified,
     ).where(Media.owner_id == user_id).order_by(order))
 
     results = [
@@ -171,10 +173,9 @@ async def get_file_data(db: AsyncSession, user_id: uuid.UUID, limit : int, sort_
             mime=row.mime_type,
             size=row.size,
             date_uploaded=row.date_uploaded,
-            #date_created=row.date_created,
-            #date_last_modified=row.date_last_modified,
-            metadata=row.file_metadata,
             date_created=row.date_created,
+            date_last_modified=row.date_last_modified,
+            metadata=row.file_metadata,
         )
         for row in rows
     ]
@@ -192,6 +193,7 @@ async def get_file_data_single(db: AsyncSession, user_id: uuid.UUID) -> FileData
         Media.date_uploaded,
         Media.file_metadata,
         Media.date_created,
+        Media.date_last_modified,
     ).where(Media.owner_id == user_id))
 
     row = row.one_or_none()
@@ -203,10 +205,10 @@ async def get_file_data_single(db: AsyncSession, user_id: uuid.UUID) -> FileData
         mime=row.mime_type,
         size=row.size,
         date_uploaded=row.date_uploaded,
-        #date_created=row.date_created,
-        #date_last_modified=row.date_last_modified,
-        metadata=row.file_metadata,
         date_created=row.date_created,
+        date_last_modified=row.date_last_modified,
+        metadata=row.file_metadata,
+        #date_created=row.date_created,
     )
 
     return result

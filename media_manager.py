@@ -27,6 +27,7 @@ ORIGINAL_DIR.mkdir(exist_ok=True)
 THUMBNAIL_DIR = UPLOAD_DIR / "thumbnails"
 THUMBNAIL_DIR.mkdir(exist_ok=True)
 VIEWABLES_DIR = UPLOAD_DIR / "viewables"
+VIEWABLES_DIR.mkdir(exist_ok=True)
 
 viewable_mimes = {"image/jpg", "image/jpeg", "image/png", "video/mp4"}
 
@@ -121,6 +122,7 @@ async def upload_media(db: AsyncSession, data: UploadFile, user_id: uuid.UUID):
     # --- SAVE METADATA ---
     meta = file_metadata.get_metadata(str(path), ext)
     date_created = meta.get("date_created")
+    date_last_modified = meta.get("date_last_modified")
 
     location_data = meta.get("gps")
     if location_data:
@@ -156,10 +158,9 @@ async def upload_media(db: AsyncSession, data: UploadFile, user_id: uuid.UUID):
         magic_type=magic_type,
         size=data.size,
         date_uploaded=datetime.now(timezone.utc),
-        #date_created=datetime.now(timezone.utc),
-        #date_last_modified=datetime.now(timezone.utc),
-        file_metadata=meta.get("data"),
         date_created=date_created,
+        date_last_modified=date_last_modified,
+        file_metadata=meta.get("data"),
         naturally_viewable=naturally_viewable,
         viewable_name=viewable_name,
         location=location_point,
