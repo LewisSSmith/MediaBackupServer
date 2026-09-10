@@ -4,12 +4,16 @@ from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from sqlalchemy.ext.asyncio import AsyncSession
+from dotenv import load_dotenv
+import os
 
 from database import get_db, get_user_by_id
 
-SECRET_KEY = "your-secret-key"  # use a long random string in production
+load_dotenv()
+
+SECRET_KEY = os.getenv("SECRET_KEY")  # use a long random string in production
 ALGORITHM = "HS256"
-TOKEN_EXPIRE_MINUTES = 60
+TOKEN_EXPIRE_MINUTES = os.getenv("TOKEN_EXPIRE_MINUTES") 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
