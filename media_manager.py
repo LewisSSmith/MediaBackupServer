@@ -8,17 +8,22 @@ import magic
 import rawpy
 from PIL import Image
 from geoalchemy2 import WKTElement
+from dotenv import load_dotenv
+import os
 
 import file_metadata
 import thumbnail
 from filetypes import is_image, is_video, is_supported
 
-PIL.Image.MAX_IMAGE_PIXELS = 199756800 #REMOVE THIS BEFORE PRODUCTION
 from fastapi import UploadFile, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from database import Media
+
+load_dotenv()
+
+PIL.Image.MAX_IMAGE_PIXELS = os.getenv("MAX_IMAGE_PIXELS") #REMOVE THIS BEFORE PRODUCTION
 
 UPLOAD_DIR = Path("uploads")
 UPLOAD_DIR.mkdir(exist_ok=True)

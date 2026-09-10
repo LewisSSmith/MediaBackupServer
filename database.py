@@ -3,6 +3,7 @@ import os
 import uuid
 from datetime import datetime
 
+import bcrypt
 from dotenv import load_dotenv
 from geoalchemy2 import Geography, WKBElement
 from geoalchemy2.shape import to_shape
@@ -72,16 +73,16 @@ async def get_db():
         yield session
 
 
-#TODO use a better hashing algorithm
 def hash_password(password: str) -> str:
-    return hashlib.sha256(password.encode()).hexdigest()
+    return bcrypt.hashpw(password, bcrypt.gensalt())
 
 
 async def get_user_by_username_and_password(db: AsyncSession, username: str, password: str) -> User | None:
     user = await get_user_by_username(db, username)
     if not user:
         return None
-    if user.password_hash != hash_password(password):
+    
+    if bcrypt.checkpw(password, user.password_hash):
         return None
     return user
 
