@@ -1,0 +1,24 @@
+services:
+  server:
+    build: .
+    ports:
+      - "${API_PORT}:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./uploads:/server/uploads
+    depends_on:
+      - database
+
+  database:
+    image: postgis/postgis:17-3.5
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER} #postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} #password
+      POSTGRES_DB: ${POSTGRES_DB} #mydatabase
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  postgres_data:
