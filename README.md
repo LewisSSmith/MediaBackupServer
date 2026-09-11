@@ -6,7 +6,15 @@ The backend is responsible for storing all media files, user accounts and acting
 
 This repository is part of the [Media Backup Project](https://github.com/LewisSSmith/MediaBackup)
 
-## Setup (Debian/Ubuntu)
+## Docker Setup (Recommended)
+
+1. Ensure docker is installed
+2. Clone repository to a directory of your choice
+3. Copy .env.example and rename to .env
+4. Set Postgres password in newly created .env
+5. Run `docker compose up` in a terminal in your project directory
+
+## Debian/Ubuntu Setup
 
 1. Clone repository to a directory of your choice
 
@@ -64,6 +72,9 @@ ALTER TABLE spatial_ref_sys OWNER TO myuser;
 ALTER TABLE users OWNER TO myuser;
 ```
 
+10. Copy .env.example and rename to .env
+11. Set Postgres user, password and database name in newly created .env. Also change 'database' to 'localhost' in DATABASE_URL
+
 ### 3. Install ExifTool and ffmpeg
 
 1. `sudo apt install libimage-exiftool-perl`
@@ -72,7 +83,7 @@ ALTER TABLE users OWNER TO myuser;
 ### 4. Final Steps
 1. Run main.py: `python3 main.py`
 
-## Setup (Windows)
+## Windows Setup
 
 Note: Ensure to restart computer if you encounter an issue during setup
 
@@ -122,7 +133,8 @@ Note: Ensure to restart computer if you encounter an issue during setup
 | email | text | Y |
 | password_hash | text | Y |
 
-8. Return to project directory and rename .env.example to .env and set password in .env to your PostgreSQL password
+8. Return to project directory and copy .env.example and rename to .env
+9. Set Postgres user, password and database name in newly created .env. Also change 'database' to 'localhost' in DATABASE_URL
 
 ### 3. Install ExifTool
 
